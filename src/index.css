@@ -6,7 +6,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.die{
+  display:flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -15,9 +20,10 @@ code {
   display:flex;
   justify-content: center;
   align-items: center;
-  width: 800px;
+  width: 600px;
   border: 1px solid lightgray;
   margin-bottom: 10px !important;
+  padding:18px;
   }
   .App {
     display:grid;

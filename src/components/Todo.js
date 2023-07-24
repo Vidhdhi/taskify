@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import { Button, Card, Input, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { db } from "../firebase.js";
@@ -10,11 +10,11 @@ const Todo = ({ arr }) => {
   const [updatedTodo, setUpdatedTodo] = useState(arr.item.todo);
 
   return (
-    <List className="todo__list">
+    <Card className="todo__list">
       <ListItem>
         <ListItemAvatar />
         {editMode ? (
-          <input
+          <Input
             type="text"
             value={updatedTodo}
             onChange={(e) => setUpdatedTodo(e.target.value)}
@@ -24,7 +24,7 @@ const Todo = ({ arr }) => {
         )}
       </ListItem>
       {editMode ? (
-        <button
+        <Button variant="contained" color="primary" 
           onClick={() => {
             updateDoc(doc(db, "todos", arr.id), {
               todo: updatedTodo,
@@ -33,7 +33,7 @@ const Todo = ({ arr }) => {
           }}
         >
           Save
-        </button>
+        </Button> 
       ) : (
         <>
           <DeleteIcon
@@ -43,16 +43,17 @@ const Todo = ({ arr }) => {
               deleteDoc(doc(db, "todos", arr.id));
             }}
           />
+          &nbsp;&nbsp;&nbsp;
           <EditIcon
             fontSize="large"
             style={{ opacity: 0.7 }}
             onClick={() => {
               setEditMode(!editMode);
             }}
-          />
+          />&nbsp;&nbsp;&nbsp;
         </>
       )}
-    </List>
+    </Card>
   );
 };
 
