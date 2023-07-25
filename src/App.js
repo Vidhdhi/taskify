@@ -20,8 +20,7 @@ import {
   onSnapshot,
   addDoc,
   serverTimestamp,
-  updateDoc,
-  deleteDoc,
+  updateDoc,deleteDoc
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -33,6 +32,7 @@ const ItemTypes = {
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
+  console.log('tasks', tasks)
   const [input, setInput] = useState('');
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const App = () => {
 
   const deleteTask = async (id) => {
     try {
-      await deleteDoc(doc(db, 'tasks', id));
+      await deleteDoc(doc(db, 'tasks', id)); 
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -89,18 +89,23 @@ const App = () => {
         isDragging: !!monitor.isDragging(),
       }),
     });
-
+ 
+ 
     const [, drop] = useDrop({
-      accept: ItemTypes.TASK,
-      canDrop: (item) => item.status !== status,
-      drop: (item, monitor) => {
-        const didDrop = monitor.didDrop();
-        if (!didDrop && item.status !== status) {
-          moveTask(item.id, status);
-        }
-      },
-    });
-
+        accept: ItemTypes.TASK,
+        canDrop: (item) => item.status !== status,
+        drop: (item) => {
+          if (item.status === 'todo') {
+            moveTask(item.id, status); // Move to the current column's status
+          } else if (item.status === 'inprocess') {
+            if (status === 'complete') {
+              moveTask(item.id, status); // Move to 'Complete' if dropped on the 'Complete' column
+            } else {
+              moveTask(item.id, 'inprocess'); // Move back to 'In Process' if dropped on other columns
+            }
+          }
+        },
+      });
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(title);
 
@@ -113,18 +118,6 @@ const App = () => {
         editTask(id, editedTitle);
       }
       setIsEditing(false);
-    };
-
-    const handleMoveToInProcess = () => {
-      if (status === 'todo') {
-        moveTask(id, 'inprocess');
-      }
-    };
-
-    const handleMoveToComplete = () => {
-      if (status === 'inprocess') {
-        moveTask(id, 'complete');
-      }
     };
 
     return (
@@ -143,18 +136,8 @@ const App = () => {
           ) : (
             <>
               <Typography variant="body1">{title}</Typography>
-              {status === 'todo' && (
-                <>
-                  <Button onClick={handleEditClick}>Edit</Button>
-                  <Button onClick={() => deleteTask(id)}>Delete</Button>
-                  <Button onClick={handleMoveToInProcess}>Move to In Process</Button>
-                </>
-              )}
-              {status === 'inprocess' && (
-                <>
-                  <Button onClick={handleMoveToComplete}>Move to Complete</Button>
-                </>
-              )}
+              <Button onClick={handleEditClick}>Edit</Button>
+              <Button onClick={() => deleteTask(id)}>Delete</Button>
             </>
           )}
         </Paper>
