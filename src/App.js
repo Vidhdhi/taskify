@@ -122,7 +122,7 @@ const App = () => {
 
     return (
       <div ref={(node) => drag(drop(node))} style={{ opacity: isDragging ? 0.5 : 1 }}>
-        <Paper elevation={3} className="task">
+        <Paper elevation={3} className="task" sx={{margin:'10px'}}>
           {isEditing ? (
             <>
               <TextField
@@ -152,7 +152,7 @@ const App = () => {
           <Typography variant="h6">Taskify</Typography>
         </Toolbar>
       </AppBar>
-      <Container className="App">
+      <Container className="App" sx={{marginTop:'40px',marginBottom:'40px'}}>
         <form>
           <TextField
             id="outlined-basic"
@@ -160,7 +160,8 @@ const App = () => {
             variant="outlined"
             style={{ margin: '0px 5px' }}
             size="small"
-            value={input}
+            
+            value={input||""}
             onChange={(e) => setInput(e.target.value)}
           />
           <Button variant="contained" color="primary" onClick={addTask}>
