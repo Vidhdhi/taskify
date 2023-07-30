@@ -122,7 +122,7 @@ const App = () => {
 
     return (
       <div ref={(node) => drag(drop(node))} style={{ opacity: isDragging ? 0.5 : 1 }}>
-        <Paper elevation={3} className="task" sx={{margin:'10px'}}>
+        <Paper elevation={3} className="task" sx={{margin:'10px',padding:'4%'}}>
           {isEditing ? (
             <>
               <TextField
