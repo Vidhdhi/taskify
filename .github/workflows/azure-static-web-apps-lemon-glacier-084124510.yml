@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Azure Static Web Apps CI/CD with Backup
 
 on:
   push:
@@ -31,6 +31,22 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
+
+      # Backup Step: Create an archive of the repository code and push it to Azure Blob Container
+      - name: Backup files and push to Azure Blob
+        if: success() # Run this step only if the previous steps were successful
+        run: |
+          # Create an archive of the repository code
+          git archive --format=zip HEAD -o backup.zip
+
+          # Install Azure CLI
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+          # Log in to Azure using the provided credentials from GitHub Secrets
+          az login --service-principal -u ${{ secrets.AZURE_SP_APP_ID }} -p ${{ secrets.AZURE_SP_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+
+          # Upload the backup to Azure Blob Container
+          az storage blob upload --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} --account-key ${{ secrets.AZURE_STORAGE_KEY }} --container-name ${{ secrets.AZURE_STORAGE_CONTAINER }} --name backup.zip --type block --content-type application/zip
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
