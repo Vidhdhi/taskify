@@ -167,7 +167,7 @@ const App = () => {
     <DndProvider backend={HTML5Backend}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">Taskify</Typography>
+          <Typography variant="h6">Taskify app</Typography>
         </Toolbar>
       </AppBar>
       <Container className="App" sx={{ marginTop: '40px', marginBottom: '40px' }}>
