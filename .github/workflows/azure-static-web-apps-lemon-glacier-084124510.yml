@@ -46,11 +46,12 @@ jobs:
           # Create an archive of the repository code in the backup directory
           git archive --format=zip HEAD -o /tmp/backup/backup.zip
 
-          # Install Azure CLI 
+          # Install Azure CLI and the required extension (storage-preview)
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az extension add --name storage-preview
 
           # Upload the entire backup directory to Azure Blob Container using Azure CLI and the GitHub secrets
-          az storage blob directory upload --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --source /tmp/backup --destination $AZURE_STORAGE_CONTAINER
+          az storage blob directory upload --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --source /tmp/backup --destination $AZURE_STORAGE_CONTAINER --container $AZURE_STORAGE_CONTAINER --recursive
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
