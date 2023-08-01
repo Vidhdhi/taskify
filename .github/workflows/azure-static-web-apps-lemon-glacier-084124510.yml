@@ -50,7 +50,7 @@ jobs:
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
           # Upload the backup to Azure Blob Container using Azure CLI and the GitHub secrets
-          az storage blob upload --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --container-name $AZURE_STORAGE_CONTAINER --type block --name backup.zip --content-type application/zip --source /tmp/backup/backup.zip
+          az storage blob upload --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --type block --container-name $AZURE_STORAGE_CONTAINER --name backup.zip --type block --content-type application/zip --source /tmp/backup/backup.zip
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
