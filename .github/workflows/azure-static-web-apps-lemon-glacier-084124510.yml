@@ -40,17 +40,17 @@ jobs:
           AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
           AZURE_STORAGE_CONTAINER: ${{ secrets.AZURE_STORAGE_CONTAINER }}
         run: |
-          # Create a backup directory in the GitHub workspace
-          mkdir -p $GITHUB_WORKSPACE/backup
+          # Create a backup directory in the /tmp directory
+          mkdir -p /tmp/backup
 
           # Create an archive of the repository code in the backup directory
-          git archive --format=zip HEAD -o $GITHUB_WORKSPACE/backup/backup.zip
+          git archive --format=zip HEAD -o /tmp/backup/backup.zip
 
           # Install Azure CLI
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
           # Upload the backup to Azure Blob Container using Azure CLI and the GitHub secrets
-          az storage blob upload --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --container-name $AZURE_STORAGE_CONTAINER --name backup.zip --type block --content-type application/zip --source $GITHUB_WORKSPACE/backup/backup.zip
+          az storage blob upload --account-name $AZURE_STORAGE_ACCOUNT --account-key $AZURE_STORAGE_KEY --container-name $AZURE_STORAGE_CONTAINER --name backup.zip --type block --content-type application/zip --source /tmp/backup/backup.zip
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
