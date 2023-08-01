@@ -49,7 +49,7 @@ jobs:
           # Create an archive of the repository code in the backup directory
           git archive --format=zip HEAD -o /tmp/backup/backup.zip
 
-          # Install Azure CLI
+          # Install Azure CLI 
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
           # Log in to Azure using the service principal
