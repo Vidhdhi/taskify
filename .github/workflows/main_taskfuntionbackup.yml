@@ -15,10 +15,15 @@ jobs:
         with:
           ref: main  # Replace 'main' with your main branch name
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'  # Update to the latest Node.js version
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1'  # Adjust the .NET Core version if needed
+          dotnet-version: '5.x'  # Update to a supported .NET Core version
 
       - name: Build Azure Functions
         run: dotnet build --configuration Release
@@ -29,8 +34,8 @@ jobs:
       - name: Deploy Azure Functions
         uses: Azure/functions-action@v1
         with:
-          app-name: '<your-function-app-name>'
-          package: '$(Build.ArtifactStagingDirectory)/taskfuntionbackup.zip'  # Replace 'FunctionAppName' with your Function App name
+          app-name: 'taskfuntionbackup'  # Replace 'taskfuntionbackup' with the name of your Azure Function App.
+          package: '$(Build.ArtifactStagingDirectory)/FunctionAppName.zip'  # Leave this as it is. It refers to the output ZIP file generated during the publish step.
 
       - name: Run Backup Function
         uses: azure/CLI@v1
