@@ -20,7 +20,8 @@ import {
   onSnapshot,
   addDoc,
   serverTimestamp,
-  updateDoc,deleteDoc
+  updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -32,7 +33,6 @@ const ItemTypes = {
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
-  console.log('tasks', tasks)
   const [input, setInput] = useState('');
 
   useEffect(() => {
@@ -51,14 +51,14 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
-  const moveTask = (id, newStatus) => {
+  const moveTask = async (id, newStatus) => {
     const taskRef = doc(db, 'tasks', id);
-    updateDoc(taskRef, { status: newStatus });
+    await updateDoc(taskRef, { status: newStatus });
   };
 
   const deleteTask = async (id) => {
     try {
-      await deleteDoc(doc(db, 'tasks', id)); 
+      await deleteDoc(doc(db, 'tasks', id));
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -89,23 +89,23 @@ const App = () => {
         isDragging: !!monitor.isDragging(),
       }),
     });
- 
- 
+
     const [, drop] = useDrop({
-        accept: ItemTypes.TASK,
-        canDrop: (item) => item.status !== status,
-        drop: (item) => {
-          if (item.status === 'todo') {
-            moveTask(item.id, status); // Move to the current column's status
-          } else if (item.status === 'inprocess') {
-            if (status === 'complete') {
-              moveTask(item.id, status); // Move to 'Complete' if dropped on the 'Complete' column
-            } else {
-              moveTask(item.id, 'inprocess'); // Move back to 'In Process' if dropped on other columns
-            }
+      accept: ItemTypes.TASK,
+      canDrop: (item) => item.status !== status,
+      drop: (item) => {
+        if (item.status === 'todo') {
+          moveTask(item.id, status); // Move to the current column's status
+        } else if (item.status === 'inprocess') {
+          if (status === 'complete') {
+            moveTask(item.id, status); // Move to 'Complete' if dropped on the 'Complete' column
+          } else {
+            moveTask(item.id, 'inprocess'); // Move back to 'In Process' if dropped on other columns
           }
-        },
-      });
+        }
+      },
+    });
+
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(title);
 
@@ -120,9 +120,17 @@ const App = () => {
       setIsEditing(false);
     };
 
+    const handleMoveToInProcess = () => {
+      moveTask(id, 'inprocess');
+    };
+
+    const handleMoveToComplete = () => {
+      moveTask(id, 'complete');
+    };
+
     return (
       <div ref={(node) => drag(drop(node))} style={{ opacity: isDragging ? 0.5 : 1 }}>
-        <Paper elevation={3} className="task" sx={{margin:'10px',padding:'4%'}}>
+        <Paper elevation={3} className="task" sx={{ margin: '10px', padding: '4%' }}>
           {isEditing ? (
             <>
               <TextField
@@ -138,6 +146,16 @@ const App = () => {
               <Typography variant="body1">{title}</Typography>
               <Button onClick={handleEditClick}>Edit</Button>
               <Button onClick={() => deleteTask(id)}>Delete</Button>
+
+              {status === 'todo' && (
+                <>
+                  <Button onClick={handleMoveToInProcess}>Move to In Process</Button>
+                  <Button onClick={handleMoveToComplete}>Move to Complete</Button>
+                </>
+              )}
+              {status === 'inprocess' && (
+                <Button onClick={handleMoveToComplete}>Move to Complete</Button>
+              )}
             </>
           )}
         </Paper>
@@ -152,7 +170,7 @@ const App = () => {
           <Typography variant="h6">Taskify</Typography>
         </Toolbar>
       </AppBar>
-      <Container className="App" sx={{marginTop:'40px',marginBottom:'40px'}}>
+      <Container className="App" sx={{ marginTop: '40px', marginBottom: '40px' }}>
         <form>
           <TextField
             id="outlined-basic"
@@ -160,8 +178,7 @@ const App = () => {
             variant="outlined"
             style={{ margin: '0px 5px' }}
             size="small"
-            
-            value={input||""}
+            value={input || ''}
             onChange={(e) => setInput(e.target.value)}
           />
           <Button variant="contained" color="primary" onClick={addTask}>
@@ -190,7 +207,8 @@ const App = () => {
             {tasks
               .filter((task) => task.status === 'complete')
               .map((task) => (
-                <Task key={task.id} {...task} />
+                <Task key={task.id} {...task} 
+                />
               ))}
           </Grid>
         </Grid>
