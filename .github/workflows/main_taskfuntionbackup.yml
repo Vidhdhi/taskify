@@ -1,20 +1,42 @@
-name: Azure Static Web App Backup
+name: Azure Functions Deployment and Backup
 
 on:
   push:
     branches:
-      - main  # Change this to your main branch name
+      - main  # Replace 'main' with your main branch name
 
 jobs:
-  backup:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
 
-    - name: Backup Azure Static Web App
-      uses: azure/functions-action@v1
-      with:
-        functionApp: 'taskfuntionbackup'
-        packageName: '.'
-        publishLocal: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: main  # Replace 'main' with your main branch name
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1'  # Adjust the .NET Core version if needed
+
+      - name: Build Azure Functions
+        run: dotnet build --configuration Release
+
+      - name: Publish Azure Functions
+        run: dotnet publish --configuration Release --output $(Build.ArtifactStagingDirectory)
+
+      - name: Deploy Azure Functions
+        uses: Azure/functions-action@v1
+        with:
+          app-name: '<your-function-app-name>'
+          package: '$(Build.ArtifactStagingDirectory)/taskfuntionbackup.zip'  # Replace 'FunctionAppName' with your Function App name
+
+      - name: Run Backup Function
+        uses: azure/azure-cli@v1
+        with:
+          azcliversion: '2.28.0'  # Adjust the Azure CLI version if needed
+          inlineScript: |
+            az storage blob copy start-batch --destination-container backup --source-container webtaskify --source-account-name taskifyweb
+        env:
+          AZURE_STORAGE_CONNECTION_STRING: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
