@@ -144,17 +144,17 @@ const App = () => {
           ) : (
             <>
               <Typography variant="body1">{title}</Typography>
-              <Button onClick={handleEditClick}>Edit</Button>
-              <Button onClick={() => deleteTask(id)}>Delete</Button>
+              <Button variant='contained' onClick={handleEditClick}>Edit</Button>
+              <Button variant='contained' onClick={() => deleteTask(id)}>Delete</Button>
 
               {status === 'todo' && (
                 <>
-                  <Button onClick={handleMoveToInProcess}>Move to In Process</Button>
-                  <Button onClick={handleMoveToComplete}>Move to Complete</Button>
+                  <Button variant='contained' onClick={handleMoveToInProcess}>Move to In Process</Button>
+                  <Button variant='contained' onClick={handleMoveToComplete}>Move to Complete</Button>
                 </>
               )}
               {status === 'inprocess' && (
-                <Button onClick={handleMoveToComplete}>Move to Complete</Button>
+                <Button variant='contained' onClick={handleMoveToComplete}>Move to Complete</Button>
               )}
             </>
           )}
@@ -167,8 +167,8 @@ const App = () => {
     <DndProvider backend={HTML5Backend}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">Taskify app</Typography>
-        </Toolbar>
+          <Typography variant="h6">Taskify (Task Management)</Typography>
+        </Toolbar> 
       </AppBar>
       <Container className="App" sx={{ marginTop: '40px', marginBottom: '40px' }}>
         <form>
