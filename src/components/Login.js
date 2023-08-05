@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import {
   getAuth,
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';

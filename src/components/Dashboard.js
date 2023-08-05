@@ -35,7 +35,7 @@ const ItemTypes = {
 
 const Dashboard = ({ user }) => {
   const [tasks, setTasks] = useState([]);
-  const [input, setInput] = useState('');
+
   const [openAddTaskDialog, setOpenAddTaskDialog] = useState(false);
   const [newTaskData, setNewTaskData] = useState({
     title: '',
