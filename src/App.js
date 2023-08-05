@@ -195,7 +195,7 @@ const App = () => {
               ))}
           </Grid>
           <Grid item xs={4}>
-            <Typography variant="h6">In Process</Typography>
+            <Typography variant="h6">In Process ttt</Typography>
             {tasks
               .filter((task) => task.status === 'inprocess')
               .map((task) => (
