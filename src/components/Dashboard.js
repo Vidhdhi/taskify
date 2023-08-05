@@ -206,7 +206,7 @@ const Dashboard = ({ user }) => {
         </Toolbar>
       </AppBar>
       <Container className="App" sx={{ marginTop: '40px', marginBottom: '40px' }}>
-        <form>
+        <form style={{marginBottom: '40px'}}>
           <Button variant="contained" color="primary" onClick={handleOpenAddTaskDialog}>
             Add Task
           </Button>
@@ -282,10 +282,10 @@ const Dashboard = ({ user }) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseAddTaskDialog} color="primary">
+          <Button onClick={handleCloseAddTaskDialog} variant="outlined" color="primary">
             Cancel
           </Button>
-          <Button onClick={handleAddTask} color="primary">
+          <Button onClick={handleAddTask} variant="contained" color="primary">
             Add
           </Button>
         </DialogActions>

@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
@@ -17,5 +18,6 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  return <>{children(user)}</>;
+  return <>{children(user)}     <ToastContainer position="top-center" theme="colored" autoClose={5000} hideProgressBar />
+</>;
 };

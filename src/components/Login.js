@@ -11,7 +11,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-
+import { toast } from 'react-toastify';
 const Login = ({ isNewUser, toggleMode }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,21 +19,24 @@ const Login = ({ isNewUser, toggleMode }) => {
   const handleSignIn = async () => {
     try {
       await signInWithEmailAndPassword(getAuth(), email, password);
+      toast.success('Sign in successful');
     } catch (error) {
       console.error('Error signing in:', error);
+      toast.error('Error signing in');
     }
   };
-
+  
   const handleSignUp = async () => {
     try {
       await createUserWithEmailAndPassword(getAuth(), email, password);
+      toast.success('Sign up successful');
     } catch (error) {
       console.error('Error signing up:', error);
+      toast.error('Error signing up');
     }
   };
-
   return (
-    <Grid sx={{display:'flex',flexDirection:'column',gap:'12px',maxWidth:'450px',margin:'0 auto', backgroundColor:'lightgray',padding:'4%'}}>
+    <Grid sx={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center', gap:'12px',maxWidth:'450px',margin:'0 auto', backgroundColor:'lightgray',padding:'4%'}}>
       <Typography variant="h5" style={{ margin: '20px 0' }}>
         {isNewUser ? 'Create an account' : 'Log in to continue'}
       </Typography>
