@@ -211,8 +211,8 @@ const Dashboard = ({ user }) => {
             Add Task
           </Button>
         </form>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
+        <Grid container spacing={4}>
+          <Grid item xs={4} sx={{backgroundColor:'lightblue',padding:'4%'}}>
             <Typography variant="h6">Todo</Typography>
             {tasks
               .filter(task => task.status === 'todo')
@@ -220,7 +220,7 @@ const Dashboard = ({ user }) => {
                 <Task key={task.id} {...task} />
               ))}
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={4} sx={{backgroundColor:'orange',padding:'4%'}}>
             <Typography variant="h6">In Process</Typography>
             {tasks
               .filter(task => task.status === 'inprocess')
@@ -228,7 +228,7 @@ const Dashboard = ({ user }) => {
                 <Task key={task.id} {...task} />
               ))}
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={4} sx={{backgroundColor:'lightgreen',padding:'4%'}}>
             <Typography variant="h6">Complete</Typography>
             {tasks
               .filter(task => task.status === 'complete')
