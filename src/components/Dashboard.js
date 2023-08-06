@@ -199,7 +199,7 @@ const Dashboard = ({ user }) => {
     <DndProvider backend={HTML5Backend}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">Taskify (Task Management)</Typography>
+          <Typography variant="h6">Taskify (Task Management System)</Typography>
           <Button color="inherit" onClick={() => signOut(user.auth)}>
             Logout
           </Button>
